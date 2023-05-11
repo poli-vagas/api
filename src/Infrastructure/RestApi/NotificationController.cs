@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PoliVagas.Core.Application.CreateNotification;
+using PoliVagas.Core.Application.Subscribe;
 
 namespace PoliVagas.Core.Infrastructure.RestApi;
 
@@ -8,12 +8,12 @@ namespace PoliVagas.Core.Infrastructure.RestApi;
 public class NotificationController : ControllerBase
 {
     private readonly ILogger<NotificationController> _logger;
-    private readonly Handler _handler;
+    private readonly SubscribeHandler _handler;
     private readonly PoliVagas.Core.Application.NotifyNewJobs.Handler _notify;
 
     public NotificationController(
         ILogger<NotificationController> logger,
-        Handler handler,
+        SubscribeHandler handler,
         PoliVagas.Core.Application.NotifyNewJobs.Handler notify
     ) {
         _logger = logger;
@@ -21,8 +21,13 @@ public class NotificationController : ControllerBase
         _notify = notify;
     }
 
+    /// <summary>
+    /// Subscribes an email to a job filter
+    /// </summary>
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Command command)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create([FromBody] SubscribeCommand command)
     {
         if (!ModelState.IsValid) {
             return BadRequest(ModelState);

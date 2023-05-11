@@ -1,18 +1,18 @@
 using PoliVagas.Core.Domain;
 using System.ComponentModel.DataAnnotations;
 
-namespace PoliVagas.Core.Application.CreateNotification;
+namespace PoliVagas.Core.Application.Subscribe;
 
-public class Handler
+public class SubscribeHandler
 {
     private INotificationRepository _notifications;
 
-    public Handler(INotificationRepository notifications)
+    public SubscribeHandler(INotificationRepository notifications)
     {
         _notifications = notifications;
     }
 
-    public async Task<Notification> Execute(Command command)
+    public async Task<Notification> Execute(SubscribeCommand command)
     {
         var notification = Notification.Create(command.Email, command.Filter);
 
@@ -22,7 +22,7 @@ public class Handler
     }
 }
 
-public class Command
+public class SubscribeCommand
 {
     [Required, EmailAddress]
     public string Email { get; set; } = null!;

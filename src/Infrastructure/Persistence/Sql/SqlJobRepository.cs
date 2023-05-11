@@ -23,7 +23,13 @@ public class SqlJobRepository : IJobRepository
 
     public async Task<Job> FindById(Guid jobId)
     {
-        return await _jobs.Where(j => j.Id == jobId).FirstAsync();
+        Job? job = await _jobs.FindAsync(jobId);
+
+        if (job == null) {
+            throw new JobNotFoundException();
+        }
+
+        return job;
     }
 
     public async Task<IEnumerable<Job>> Find(Query query)

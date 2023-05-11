@@ -1,16 +1,16 @@
 using System.ComponentModel.DataAnnotations;
 using PoliVagas.Core.Domain;
 
-namespace PoliVagas.Core.Application.CreateJob;
+namespace PoliVagas.Core.Application.RegisterJob;
 
-public class CreateJobHandler
+public class RegisterJobHandler
 {
     private ICompanyRepository _companies;
     private IIntegrationAgentRepository _agents;
     private ICourseRepository _courses;
     private IJobRepository _opportunities;
 
-    public CreateJobHandler(
+    public RegisterJobHandler(
         ICompanyRepository companies,
         IIntegrationAgentRepository agents,
         ICourseRepository courses,
@@ -22,7 +22,7 @@ public class CreateJobHandler
         _opportunities = opportunities;
     }
 
-    public async Task<Job> Execute(CreateJobCommand command)
+    public async Task<Job> Execute(RegisterJobCommand command)
     {
         var benefits = new Benefits() {
             HasFoodVoucher = command.HasFoodVoucher,
@@ -83,7 +83,7 @@ public class CreateJobHandler
     }
 }
 
-public class CreateJobCommand
+public class RegisterJobCommand
 {
     /// <example>Acme Inc.</example>
     [Required]

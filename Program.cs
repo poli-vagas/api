@@ -15,14 +15,35 @@ builder.Services.AddControllers()
                 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => {
-    c.DescribeAllParametersInCamelCase();
+builder.Services.AddSwaggerGen(o => {
+    o.SwaggerDoc("v0", new Microsoft.OpenApi.Models.OpenApiInfo {
+        Title = "PoliVagas",
+        Version = "0.1.0",
+        Description = "PoliVagas REST API",
+        // TermsOfService = new Uri("http://tempuri.org/terms"),
+        // Contact = new OpenApiContact
+        // {
+        //     Name = "Joe Developer",
+        //     Email = "joe.developer@tempuri.org"
+        // },
+        // License = new OpenApiLicense
+        // {
+        //     Name = "Apache 2.0",
+        //     Url = new Uri("http://www.apache.org/licenses/LICENSE-2.0.html")
+        // }
+    });
+
+    o.DescribeAllParametersInCamelCase();
+
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    o.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
+// Dependency Injection
 builder.Services.AddTransient<IMailService, MailService>();
-builder.Services.AddTransient<PoliVagas.Core.Application.CreateJob.CreateJobHandler, PoliVagas.Core.Application.CreateJob.CreateJobHandler>();
+builder.Services.AddTransient<PoliVagas.Core.Application.RegisterJob.RegisterJobHandler, PoliVagas.Core.Application.RegisterJob.RegisterJobHandler>();
 builder.Services.AddTransient<PoliVagas.Core.Application.FindJob.FindJobHandler, PoliVagas.Core.Application.FindJob.FindJobHandler>();
-builder.Services.AddTransient<PoliVagas.Core.Application.CreateNotification.Handler, PoliVagas.Core.Application.CreateNotification.Handler>();
+builder.Services.AddTransient<PoliVagas.Core.Application.Subscribe.SubscribeHandler, PoliVagas.Core.Application.Subscribe.SubscribeHandler>();
 builder.Services.AddTransient<PoliVagas.Core.Application.NotifyNewJobs.Handler, PoliVagas.Core.Application.NotifyNewJobs.Handler>();
 builder.Services.AddScoped<ICompanyRepository, SqlCompanyRepository>();
 builder.Services.AddScoped<ICourseRepository, SqlCourseRepository>();
@@ -38,7 +59,9 @@ if (app.Environment.IsDevelopment()) {
 }
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c => {
+    c.SwaggerEndpoint("/swagger/v0/swagger.json", "v0 Docs");
+});
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
