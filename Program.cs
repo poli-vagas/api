@@ -21,6 +21,7 @@ builder.Services.AddSwaggerGen(c => {
 
 builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddTransient<PoliVagas.Core.Application.CreateJob.CreateJobHandler, PoliVagas.Core.Application.CreateJob.CreateJobHandler>();
+builder.Services.AddTransient<PoliVagas.Core.Application.FindJob.FindJobHandler, PoliVagas.Core.Application.FindJob.FindJobHandler>();
 builder.Services.AddTransient<PoliVagas.Core.Application.CreateNotification.Handler, PoliVagas.Core.Application.CreateNotification.Handler>();
 builder.Services.AddTransient<PoliVagas.Core.Application.NotifyNewJobs.Handler, PoliVagas.Core.Application.NotifyNewJobs.Handler>();
 builder.Services.AddScoped<ICompanyRepository, SqlCompanyRepository>();

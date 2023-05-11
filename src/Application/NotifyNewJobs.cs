@@ -1,5 +1,5 @@
 using PoliVagas.Core.Domain;
-using PoliVagas.Core.Application.SearchJob;
+using PoliVagas.Core.Application.SearchJobs;
 
 namespace PoliVagas.Core.Application.NotifyNewJobs;
 

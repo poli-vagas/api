@@ -1,6 +1,6 @@
 using PoliVagas.Core.Domain;
 
-namespace PoliVagas.Core.Application.SearchJob;
+namespace PoliVagas.Core.Application.SearchJobs;
 
 public class Query
 {

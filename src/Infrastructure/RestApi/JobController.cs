@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PoliVagas.Core.Application.CreateJob;
-using PoliVagas.Core.Application.SearchJob;
+using PoliVagas.Core.Application.FindJob;
+using PoliVagas.Core.Application.SearchJobs;
 using PoliVagas.Core.Domain;
 
 namespace PoliVagas.Core.Infrastructure.RestApi;
@@ -10,17 +11,34 @@ namespace PoliVagas.Core.Infrastructure.RestApi;
 public class JobController : ControllerBase
 {
     private readonly ILogger<JobController> _logger;
-    private readonly CreateJobHandler _handler;
+    private readonly CreateJobHandler _createHandler;
+    private readonly FindJobHandler _findHandler;
     private readonly IJobRepository _jobs;
 
     public JobController(
         ILogger<JobController> logger,
-        CreateJobHandler handler,
+        CreateJobHandler createHandler,
+        FindJobHandler findHandler,
         IJobRepository jobs
     ) {
         _logger = logger;
-        _handler = handler;
+        _createHandler = createHandler;
+        _findHandler = findHandler;
         _jobs = jobs;
+    }
+
+    [HttpGet]
+    [Route("{jobId}")]
+    public async Task<IActionResult> Find(Guid jobId)
+    {
+        Job job;
+        // try {
+            job = await _findHandler.Execute(jobId);
+        // } catch (System.Exception) {
+        //     return NotFound();
+        // }
+
+        return Ok(job);
     }
 
     [HttpPost]
@@ -30,9 +48,9 @@ public class JobController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var opportunity = await _handler.Execute(command);
+        var job = await _createHandler.Execute(command);
 
-        return Ok(opportunity);
+        return Ok(job);
     }
 
     [HttpPost]

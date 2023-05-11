@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using PoliVagas.Core.Application.SearchJob;
+using PoliVagas.Core.Application.SearchJobs;
 using PoliVagas.Core.Domain;
 
 namespace PoliVagas.Core.Infrastructure.Persistence;
@@ -7,7 +7,7 @@ namespace PoliVagas.Core.Infrastructure.Persistence;
 public class SqlJobRepository : IJobRepository
 {
     private SqlContext _dbContext;
-    private DbSet<Job> _opportunities => _dbContext.Jobs;
+    private DbSet<Job> _jobs => _dbContext.Jobs;
 
     public SqlJobRepository(SqlContext sqlContext)
     {
@@ -16,16 +16,21 @@ public class SqlJobRepository : IJobRepository
 
     public async Task Insert(Job opportunity)
     {
-        await _opportunities.AddAsync(opportunity);
+        await _jobs.AddAsync(opportunity);
 
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<Job> FindById(Guid jobId)
+    {
+        return await _jobs.Where(j => j.Id == jobId).FirstAsync();
     }
 
     public async Task<IEnumerable<Job>> Find(Query query)
     {
         var f = query.Filter;
 
-        return await _opportunities
+        return await _jobs
             .Where(o => f.CompanyId.Count == 0 || f.CompanyId.Contains(o.Company.Id))
             .Where(o => f.Type.Count == 0 || f.Type.Contains(o.Type))
             .Where(o => f.CourseId.Count == 0 || f.CourseId.Intersect(o.Courses.Select(c => c.Id)).Count() > 0)
