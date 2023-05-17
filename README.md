@@ -1,5 +1,19 @@
 # PoliVagas REST API
 
+## Installation
+
+```bash
+docker pull ghcr.io/poli-vagas/api:main
+```
+
+```bash
+docker create --name poli-vagas-api -p 8080:80 --env-file .env ghcr.io/poli-vagas/api:main
+```
+
+```bash
+docker start poli-vagas-api
+```
+
 ## Running migrations
 
 ```bash
