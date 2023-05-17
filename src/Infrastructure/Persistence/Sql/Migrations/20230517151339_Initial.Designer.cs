@@ -13,7 +13,7 @@ using PoliVagas.Core.Infrastructure.Persistence;
 namespace core.src.Infrastructure.Persistence.Sql.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20230517143457_Initial")]
+    [Migration("20230517151339_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -106,7 +106,7 @@ namespace core.src.Infrastructure.Persistence.Sql.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("GraduationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
                     b.Property<int?>("HoursPerDay")
                         .HasColumnType("integer");
@@ -115,7 +115,7 @@ namespace core.src.Infrastructure.Persistence.Sql.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("LimitDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
                     b.Property<decimal?>("Salary")
                         .HasColumnType("numeric");
@@ -323,13 +323,13 @@ namespace core.src.Infrastructure.Persistence.Sql.Migrations
                                 .HasColumnType("integer");
 
                             b1.Property<DateTime?>("MaxLimitDate")
-                                .HasColumnType("timestamp with time zone");
+                                .HasColumnType("Date");
 
                             b1.Property<int?>("MinHoursPerDay")
                                 .HasColumnType("integer");
 
                             b1.Property<DateTime?>("MinLimitDate")
-                                .HasColumnType("timestamp with time zone");
+                                .HasColumnType("Date");
 
                             b1.Property<decimal?>("MinSalary")
                                 .HasColumnType("numeric");

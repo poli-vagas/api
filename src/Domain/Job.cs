@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 namespace PoliVagas.Core.Domain;
 
 public class Job
@@ -6,7 +7,9 @@ public class Job
     public Company Company { get; private set; }
     public JobType Type { get; private set; }
     public int? Semester { get; private set; }
+    [Column(TypeName="date")]
     public DateTime? LimitDate { get; private set; }
+    [Column(TypeName="date")]
     public DateTime? GraduationDate { get; private set; }
     public IntegrationAgent? IntegrationAgent { get; private set; }
     public List<Course> Courses { get; private set; }

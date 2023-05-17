@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace PoliVagas.Core.Domain;
 
 public record JobFilter
@@ -5,7 +7,9 @@ public record JobFilter
     public List<Guid> CompanyId { get; set; } = new();
     public List<JobType> Type { get; set; } = new();
     public List<Guid> CourseId { get; set; } = new();
+    [Column(TypeName="Date")]
     public DateTime? MinLimitDate { get; set; }
+    [Column(TypeName="Date")]
     public DateTime? MaxLimitDate { get; set; }
     public List<string> Area { get; set; } = new();
     public List<Workplace> Workplace { get; set; } = new();
