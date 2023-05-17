@@ -10,11 +10,11 @@ using PoliVagas.Core.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace core.Migrations
+namespace core.src.Infrastructure.Persistence.Sql.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20230510141851_CreateTables")]
-    partial class CreateTables
+    [Migration("20230517143457_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,21 @@ namespace core.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("CourseJob", b =>
+                {
+                    b.Property<Guid>("CoursesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CoursesId", "JobId");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("CourseJob");
+                });
 
             modelBuilder.Entity("PoliVagas.Core.Domain.Company", b =>
                 {
@@ -47,16 +62,11 @@ namespace core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("JobId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("JobId");
 
                     b.ToTable("Courses");
                 });
@@ -149,11 +159,19 @@ namespace core.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("PoliVagas.Core.Domain.Course", b =>
+            modelBuilder.Entity("CourseJob", b =>
                 {
+                    b.HasOne("PoliVagas.Core.Domain.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PoliVagas.Core.Domain.Job", null)
-                        .WithMany("Courses")
-                        .HasForeignKey("JobId");
+                        .WithMany()
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PoliVagas.Core.Domain.Job", b =>
@@ -334,11 +352,6 @@ namespace core.Migrations
 
                     b.Navigation("Filter")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("PoliVagas.Core.Domain.Job", b =>
-                {
-                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

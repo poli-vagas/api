@@ -25,6 +25,10 @@ public class SqlContext : DbContext
         modelBuilder.Entity<Job>()
             .OwnsOne(o => o.Contact);
 
+        modelBuilder.Entity<Job>()
+            .HasMany(j => j.Courses)
+            .WithMany();
+
         modelBuilder.Entity<Notification>()
             .OwnsOne(n => n.Filter);
     }

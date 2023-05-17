@@ -13,7 +13,6 @@ public class Job
     public string Description { get; private set; }
     public string? Area { get; private set; }
     public Workplace? Workplace { get; private set; }
-    // TODO: Modalidade (Presencial, Remoto, Hibrido)
     public int? HoursPerDay { get; private set; }
     public decimal? Salary { get; private set; }
     public Benefits Benefits { get; private set; }
