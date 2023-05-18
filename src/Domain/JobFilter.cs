@@ -21,4 +21,6 @@ public record JobFilter
     public bool? HasHealthInsurance { get; set; }
     public bool? HasLifeInsurance { get; set; }
     public List<EnglishLevel> EnglishLevel { get; set; } = new();
+    public DateTime? MinCreatedTime { get; set; }
+    public DateTime? MaxCreatedTime { get; set; }
 }

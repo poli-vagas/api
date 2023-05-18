@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using PoliVagas.Core.Domain;
+using PoliVagas.Core.Infrastructure.Background;
 using PoliVagas.Core.Infrastructure.Persistence;
 using PoliVagas.Core.Infrastructure.Services;
 
@@ -40,17 +41,23 @@ builder.Services.AddSwaggerGen(o => {
 });
 
 // Dependency Injection
+// Handlers
+builder.Services.AddTransient<PoliVagas.Core.Application.RegisterJob.RegisterJobHandler>();
+builder.Services.AddTransient<PoliVagas.Core.Application.FindJob.FindJobHandler>();
+builder.Services.AddTransient<PoliVagas.Core.Application.Subscribe.SubscribeHandler>();
+builder.Services.AddTransient<PoliVagas.Core.Application.NotifyNewJobs.NotifyNewJobsHandler>();
+// Services
 builder.Services.AddTransient<IMailService, MailService>();
-builder.Services.AddTransient<PoliVagas.Core.Application.RegisterJob.RegisterJobHandler, PoliVagas.Core.Application.RegisterJob.RegisterJobHandler>();
-builder.Services.AddTransient<PoliVagas.Core.Application.FindJob.FindJobHandler, PoliVagas.Core.Application.FindJob.FindJobHandler>();
-builder.Services.AddTransient<PoliVagas.Core.Application.Subscribe.SubscribeHandler, PoliVagas.Core.Application.Subscribe.SubscribeHandler>();
-builder.Services.AddTransient<PoliVagas.Core.Application.NotifyNewJobs.Handler, PoliVagas.Core.Application.NotifyNewJobs.Handler>();
+// Repositories
 builder.Services.AddScoped<ICompanyRepository, SqlCompanyRepository>();
 builder.Services.AddScoped<ICourseRepository, SqlCourseRepository>();
 builder.Services.AddScoped<IIntegrationAgentRepository, SqlIntegrationAgentRepository>();
 builder.Services.AddScoped<IJobRepository, SqlJobRepository>();
 builder.Services.AddScoped<INotificationRepository, SqlNotificationRepository>();
-builder.Services.AddScoped<SqlContext, SqlContext>();
+builder.Services.AddScoped<SqlContext>();
+// Background
+builder.Services.AddSingleton<NotificationService>();
+builder.Services.AddHostedService(p => p.GetRequiredService<NotificationService>());
 
 var app = builder.Build();
 

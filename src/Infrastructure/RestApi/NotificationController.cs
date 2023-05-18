@@ -9,12 +9,12 @@ public class NotificationController : ControllerBase
 {
     private readonly ILogger<NotificationController> _logger;
     private readonly SubscribeHandler _handler;
-    private readonly PoliVagas.Core.Application.NotifyNewJobs.Handler _notify;
+    private readonly PoliVagas.Core.Application.NotifyNewJobs.NotifyNewJobsHandler _notify;
 
     public NotificationController(
         ILogger<NotificationController> logger,
         SubscribeHandler handler,
-        PoliVagas.Core.Application.NotifyNewJobs.Handler notify
+        PoliVagas.Core.Application.NotifyNewJobs.NotifyNewJobsHandler notify
     ) {
         _logger = logger;
         _handler = handler;

@@ -16,7 +16,7 @@ public class SubscribeHandler
     {
         var notification = Notification.Create(command.Email, command.Filter);
 
-        await _notifications.Insert(notification);
+        await _notifications.Save(notification);
 
         return notification;
     }

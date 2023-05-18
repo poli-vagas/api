@@ -7,7 +7,7 @@ public class Notification
     public Guid Id { get; private set; }
     public string Email { get; private set; }
     public JobFilter Filter { get; private set; }
-    public DateTime LastRunTime { get; private set; }
+    public DateTime LastRunTime { get; set; }
     public DateTime CreatedTime { get; private set; }
 
     #pragma warning disable CS8618 // Used by EF Migration

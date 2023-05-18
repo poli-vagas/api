@@ -13,9 +13,11 @@ public class SqlNotificationRepository : INotificationRepository
         _dbContext = sqlContext;
     }
 
-    public async Task Insert(Notification Notification)
+    public async Task Save(Notification notification)
     {
-        await _notifications.AddAsync(Notification);
+        if (_notifications.Entry(notification).State == EntityState.Detached) {
+            await _notifications.AddAsync(notification);
+        }
 
         await _dbContext.SaveChangesAsync();
     }

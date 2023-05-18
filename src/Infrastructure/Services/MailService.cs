@@ -19,6 +19,7 @@ public class MailService : IMailService
         message.Subject = subject;
         message.From = new MailAddress(_settings.Mail, _settings.DisplayName);
         message.To.Add(new MailAddress(to));
+        message.IsBodyHtml = true;
         message.Body = body;
         message.IsBodyHtml = true;
 
