@@ -6,6 +6,16 @@ using PoliVagas.Core.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Cors settings
+var corsPolicy = "corsPolicy";
+builder.Services.AddCors(o => o.AddPolicy(corsPolicy, policy => {
+    policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithExposedHeaders();
+    })
+);
+
 builder.Services.AddControllers()
                 .AddJsonOptions(o => {
                     o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -35,16 +45,6 @@ builder.Services.AddSwaggerGen(o => {
 
     var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     o.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
-
-// Cors settings
-var corsPolicy = "corsPolicy";
-builder.Services.AddCors(options => {
-    options.AddPolicy(corsPolicy, policy => {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
 });
 
 // Dependency Injection
@@ -81,7 +81,7 @@ app.UseSwaggerUI(c => {
 });
 
 app.UseHttpsRedirection();
-app.UseCors(b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+app.UseCors(corsPolicy);
 app.UseAuthorization();
 
 app.MapControllers();
