@@ -23,4 +23,9 @@ public class InMemoryJobRepository : IJobRepository
 
         return Task.CompletedTask;
     }
+
+    public Task<int> Count(JobFilter filter)
+    {
+        throw new NotImplementedException();
+    }
 }

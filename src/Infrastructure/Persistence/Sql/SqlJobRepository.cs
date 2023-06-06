@@ -34,9 +34,18 @@ public class SqlJobRepository : IJobRepository
 
     public async Task<IEnumerable<Job>> Find(Query query)
     {
-        var f = query.Filter;
+        return await Filter(query.Filter)
+            .Skip(query.Page * query.PageSize)
+            .Take(query.PageSize)
+            .ToListAsync();
+    }
 
-        return await _jobs
+    public Task<int> Count(JobFilter filter) {
+        return Filter(filter).CountAsync();
+    }
+
+    private IQueryable<Job> Filter(JobFilter f) {
+        return _jobs
             .Where(j => f.CompanyId.Count == 0 || f.CompanyId.Contains(j.Company.Id))
             .Where(j => f.Type.Count == 0 || f.Type.Contains(j.Type))
             .Where(j => f.CourseId.Count == 0 || f.CourseId.Intersect(j.Courses.Select(c => c.Id)).Count() > 0)
@@ -55,7 +64,6 @@ public class SqlJobRepository : IJobRepository
             .Where(j => f.MinCreatedTime == null || j.CreatedTime >= f.MinCreatedTime)
             .Where(j => f.MaxCreatedTime == null || j.CreatedTime <= f.MaxCreatedTime)
             .Include(j => j.Company)
-            .Include(j => j.IntegrationAgent)
-            .ToListAsync();
+            .Include(j => j.IntegrationAgent);
     }
 }

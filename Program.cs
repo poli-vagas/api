@@ -54,6 +54,7 @@ if (emailSettings != null) builder.Services.AddSingleton(emailSettings);
 // Handlers
 builder.Services.AddTransient<PoliVagas.Core.Application.RegisterJob.RegisterJobHandler>();
 builder.Services.AddTransient<PoliVagas.Core.Application.FindJob.FindJobHandler>();
+builder.Services.AddTransient<PoliVagas.Core.Application.SearchJobs.SearchJobsHandler>();
 builder.Services.AddTransient<PoliVagas.Core.Application.Subscribe.SubscribeHandler>();
 builder.Services.AddTransient<PoliVagas.Core.Application.NotifyNewJobs.NotifyNewJobsHandler>();
 // Services

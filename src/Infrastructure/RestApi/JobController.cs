@@ -14,18 +14,18 @@ public class JobController : ControllerBase
     private readonly ILogger<JobController> _logger;
     private readonly RegisterJobHandler _createHandler;
     private readonly FindJobHandler _findHandler;
-    private readonly IJobRepository _jobs;
+    private readonly SearchJobsHandler _searchJobsHandler;
 
     public JobController(
         ILogger<JobController> logger,
         RegisterJobHandler createHandler,
         FindJobHandler findHandler,
-        IJobRepository jobs
+        SearchJobsHandler searchJobsHandler
     ) {
         _logger = logger;
         _createHandler = createHandler;
         _findHandler = findHandler;
-        _jobs = jobs;
+        _searchJobsHandler = searchJobsHandler;
     }
 
     /// <summary>
@@ -68,10 +68,10 @@ public class JobController : ControllerBase
     /// </summary>
     [HttpPost]
     [Route("search")]
-    [ProducesResponseType(typeof(IEnumerable<Job>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(SearchJobsResult), StatusCodes.Status200OK)]
     public async Task<IActionResult> Search([FromBody] Query query)
     {
-        var result = await _jobs.Find(query);
+        var result = await _searchJobsHandler.Execute(query);
 
         return Ok(result);
     }

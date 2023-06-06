@@ -10,6 +10,7 @@ public interface IJobRepository
     public Task<Job> FindById(Guid jobId);
     public Task<IEnumerable<Job>> Find(Query query);
     public Task Insert(Job opportunity);
+    public Task<int> Count(JobFilter filter);
 }
 
 public class JobNotFoundException : System.Exception
