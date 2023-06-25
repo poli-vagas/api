@@ -25,11 +25,15 @@ public class SqlCompanyRepository : ICompanyRepository
         return company;
     }
 
-
     public async Task Insert(Company Company)
     {
         await _companies.AddAsync(Company);
 
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<Company>> GetAll()
+    {
+        return await _companies.ToListAsync();
     }
 }

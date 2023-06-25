@@ -57,6 +57,8 @@ builder.Services.AddTransient<PoliVagas.Core.Application.FindJob.FindJobHandler>
 builder.Services.AddTransient<PoliVagas.Core.Application.SearchJobs.SearchJobsHandler>();
 builder.Services.AddTransient<PoliVagas.Core.Application.Subscribe.SubscribeHandler>();
 builder.Services.AddTransient<PoliVagas.Core.Application.NotifyNewJobs.NotifyNewJobsHandler>();
+builder.Services.AddTransient<PoliVagas.Core.Application.ListCompanies.ListCompaniesHandler>();
+builder.Services.AddTransient<PoliVagas.Core.Application.ListCourses.ListCoursesHandler>();
 // Services
 builder.Services.AddTransient<IMailService, MailService>();
 // Repositories
@@ -74,6 +76,9 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
+} else {
+    app.UseHttpsRedirection();
+    app.UseCors(corsPolicy);
 }
 
 app.UseSwagger();
@@ -81,8 +86,6 @@ app.UseSwaggerUI(c => {
     c.SwaggerEndpoint("/swagger/v0/swagger.json", "v0 Docs");
 });
 
-app.UseHttpsRedirection();
-app.UseCors(corsPolicy);
 app.UseAuthorization();
 
 app.MapControllers();

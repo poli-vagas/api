@@ -31,4 +31,9 @@ public class SqlCourseRepository : ICourseRepository
 
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<Course>> GetAll()
+    {
+        return await _courses.ToListAsync();
+    }
 }

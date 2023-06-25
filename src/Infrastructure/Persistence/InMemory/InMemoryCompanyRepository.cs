@@ -6,6 +6,11 @@ public class InMemoryCompanyRepository : ICompanyRepository
 {
     private List<Company> companies = new ();
 
+    public Task<IEnumerable<Company>> GetAll()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Company> GetOrAdd(string companyName)
     {
         var company = companies.Where(c => c.Name == companyName).FirstOrDefault();
