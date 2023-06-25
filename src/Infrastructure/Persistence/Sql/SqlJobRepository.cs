@@ -48,7 +48,7 @@ public class SqlJobRepository : IJobRepository
         return _jobs
             .Where(j => f.CompanyId.Count == 0 || f.CompanyId.Contains(j.Company.Id))
             .Where(j => f.Type.Count == 0 || f.Type.Contains(j.Type))
-            .Where(j => f.CourseId.Count == 0 || f.CourseId.Intersect(j.Courses.Select(c => c.Id)).Count() > 0)
+            .Where(j => f.CourseId.Count == 0 || j.Courses.Any(c => f.CourseId.Contains(c.Id)))
             .Where(j => f.MinLimitDate == null || j.LimitDate == null || j.LimitDate >= f.MinLimitDate)
             .Where(j => f.MaxLimitDate == null || j.LimitDate == null || j.LimitDate <= f.MaxLimitDate)
             .Where(j => f.Area.Count == 0 || (j.Area != null && f.Area.Contains(j.Area)))
