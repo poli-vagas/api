@@ -23,7 +23,10 @@ public class SqlJobRepository : IJobRepository
 
     public async Task<Job> FindById(Guid jobId)
     {
-        Job? job = await _jobs.FindAsync(jobId);
+        Job? job = await _jobs.Include(j => j.Company)
+                              .Include(j => j.Courses)
+                              .Include(j => j.IntegrationAgent)
+                              .FirstAsync(j => j.Id == jobId);
 
         if (job == null) {
             throw new JobNotFoundException();
@@ -64,6 +67,7 @@ public class SqlJobRepository : IJobRepository
             .Where(j => f.MinCreatedTime == null || j.CreatedTime >= f.MinCreatedTime)
             .Where(j => f.MaxCreatedTime == null || j.CreatedTime <= f.MaxCreatedTime)
             .Include(j => j.Company)
+            .Include(j => j.Courses)
             .Include(j => j.IntegrationAgent);
     }
 }
