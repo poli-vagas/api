@@ -18,6 +18,7 @@ public class Job
     public Workplace? Workplace { get; private set; }
     public int? HoursPerDay { get; private set; }
     public decimal? Salary { get; private set; }
+    public int? WeekNumber { get; private set; }
     public Benefits Benefits { get; private set; }
     public Requirements Requirements { get; private set; }
     public Contact Contact { get; private set; }
@@ -41,6 +42,7 @@ public class Job
         Workplace? workplace,
         int? hoursPerDay,
         decimal? salary,
+        int? weekNumber,
         Benefits benefits,
         Requirements requirements,
         Contact contact,
@@ -59,6 +61,7 @@ public class Job
         Workplace = workplace;
         HoursPerDay = hoursPerDay;
         Salary = salary;
+        WeekNumber = weekNumber;
         Benefits = benefits;
         Requirements = requirements;
         Contact = contact;
@@ -78,6 +81,7 @@ public class Job
         Workplace? workplace,
         int? hoursPerDay,
         decimal? salary,
+        int? weekNumber,
         Benefits benefits,
         Requirements requirements,
         Contact contact
@@ -96,6 +100,7 @@ public class Job
             workplace,
             hoursPerDay,
             salary,
+            weekNumber,
             benefits,
             requirements,
             contact,

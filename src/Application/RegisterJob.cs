@@ -8,22 +8,32 @@ public class RegisterJobHandler
     private ICompanyRepository _companies;
     private IIntegrationAgentRepository _agents;
     private ICourseRepository _courses;
-    private IJobRepository _opportunities;
+    private IJobRepository _jobs;
 
     public RegisterJobHandler(
         ICompanyRepository companies,
         IIntegrationAgentRepository agents,
         ICourseRepository courses,
-        IJobRepository opportunities
+        IJobRepository jobs
     ) {
         _companies = companies;
         _agents = agents;
         _courses = courses;
-        _opportunities = opportunities;
+        _jobs = jobs;
     }
 
     public async Task<Job> Execute(RegisterJobCommand command)
     {
+        if (command.WeekNumber != null) {
+            var found = _jobs.TryFindByWeekNumber(
+                command.WeekNumber ?? 0,
+                command.Description,
+                out var job
+            );
+
+            if (found && job != null) return job;
+        }
+
         var benefits = new Benefits() {
             HasFoodVoucher = command.HasFoodVoucher,
             HasTransportVoucher = command.HasTransportVoucher,
@@ -72,12 +82,13 @@ public class RegisterJobHandler
             command.Workplace,
             command.HoursPerDay,
             command.Salary,
+            command.WeekNumber,
             benefits,
             requirements,
             contact
         );
 
-        await _opportunities.Insert(opportunity);
+        await _jobs.Insert(opportunity);
 
         return opportunity;
     }
@@ -106,6 +117,7 @@ public class RegisterJobCommand
     [Range(1, 12)]
     public int? HoursPerDay { get; set; }
     public decimal? Salary { get; set; }
+    public int? WeekNumber { get; set; }
     public bool? HasFoodVoucher { get; set; }
     public bool? HasTransportVoucher { get; set; }
     public bool? HasHealthInsurance { get; set; }

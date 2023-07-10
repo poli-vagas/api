@@ -35,6 +35,20 @@ public class SqlJobRepository : IJobRepository
         return job;
     }
 
+    public bool TryFindByWeekNumber(int weekNumber, string description, out Job? job)
+    {
+        job = _jobs.Include(j => j.Company)
+                   .Include(j => j.Courses)
+                   .Include(j => j.IntegrationAgent)
+                   .First(j => j.WeekNumber == weekNumber && j.Description == description);
+
+        if (job == null) {
+            return false;
+        }
+
+        return true;
+    }
+
     public async Task<IEnumerable<Job>> Find(Query query)
     {
         return await Filter(query.Filter)
@@ -54,7 +68,7 @@ public class SqlJobRepository : IJobRepository
             .Where(j => f.CourseId.Count == 0 || j.Courses.Any(c => f.CourseId.Contains(c.Id)))
             .Where(j => f.MinLimitDate == null || j.LimitDate == null || j.LimitDate >= f.MinLimitDate)
             .Where(j => f.MaxLimitDate == null || j.LimitDate == null || j.LimitDate <= f.MaxLimitDate)
-            .Where(j => f.Area.Count == 0 || (j.Area != null && f.Area.Contains(j.Area)))
+            .Where(j => f.Area.Count == 0 || (j.Area != null && f.Area.Select(a => a.ToLower()).Contains(j.Area.ToLower())))
             .Where(j => f.Workplace.Count == 0 || (j.Workplace.HasValue && f.Workplace.Contains(j.Workplace.Value)))
             .Where(j => f.MinHoursPerDay == null || (j.HoursPerDay.HasValue && j.HoursPerDay >= f.MinHoursPerDay))
             .Where(j => f.MaxHoursPerDay == null || (j.HoursPerDay.HasValue && j.HoursPerDay <= f.MaxHoursPerDay))

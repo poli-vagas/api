@@ -28,4 +28,9 @@ public class InMemoryJobRepository : IJobRepository
     {
         throw new NotImplementedException();
     }
+
+    public bool TryFindByWeekNumber(int weekNumber, string description, out Job? job)
+    {
+        throw new NotImplementedException();
+    }
 }
