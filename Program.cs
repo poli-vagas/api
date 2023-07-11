@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 using PoliVagas.Core.Domain;
 using PoliVagas.Core.Infrastructure.Background;
@@ -49,7 +50,19 @@ builder.Services.AddSwaggerGen(o => {
 
 // Dependency Injection
 // Settings
-var emailSettings = builder.Configuration.GetSection("EmailSettings").Get<EmailSettings>();
+// var emailSettings = builder.Configuration.GetSection("EmailSettings").Get<EmailSettings>();
+
+if (!int.TryParse(Environment.GetEnvironmentVariable("MAIL_PORT"), out var port)) {
+    port = 0;
+};
+var emailSettings = new EmailSettings() {
+    Mail = Environment.GetEnvironmentVariable("MAIL_FROM") ?? "",
+    DisplayName = Environment.GetEnvironmentVariable("MAIL_NAME") ?? "",
+    Username = Environment.GetEnvironmentVariable("MAIL_USERNAME") ?? "",
+    Password = Environment.GetEnvironmentVariable("MAIL_PASSWORD") ?? "",
+    Host = Environment.GetEnvironmentVariable("MAIL_HOST") ?? "",
+    Port = port,
+};
 if (emailSettings != null) builder.Services.AddSingleton(emailSettings);
 // Handlers
 builder.Services.AddTransient<PoliVagas.Core.Application.RegisterJob.RegisterJobHandler>();
@@ -76,6 +89,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
+    app.UseCors(corsPolicy);
 } else {
     app.UseHttpsRedirection();
     app.UseCors(corsPolicy);

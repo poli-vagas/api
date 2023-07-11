@@ -1,5 +1,6 @@
 using PoliVagas.Core.Domain;
 using PoliVagas.Core.Application.SearchJobs;
+using System.Text;
 
 namespace PoliVagas.Core.Application.NotifyNewJobs;
 
@@ -31,8 +32,25 @@ public class NotifyNewJobsHandler
             var jobs = await _jobs.Find(query);
 
             if (jobs.Any()) {
-                var message = $"<p>You have {jobs.Count()} new jobs.</p>";
-                await _mailer.SendEmail("Test", notification.Email, message);
+                var sb = new StringBuilder();
+                sb.Append($"<p>Novas vagas foram publicadas de acordo com sua busca:</p>");
+
+                sb.Append("<ul>");
+                foreach (var job in jobs) {
+                    var type = job.Type switch {
+                        JobType.Internship  => "Estágio",
+                        JobType.Trainee     => "Trainee",
+                        JobType.FullTime    => "Emprego",
+                        _                   => job.Type.ToString(),
+                    };
+                    sb.Append($"<li><a href=\"https://poli-vagas.mario.engineering/dash/vacancies/{job.Id.ToString()}\">");
+                    sb.Append($"{type} @ {job.Company.Name}");
+                    sb.Append("</a></li>");
+                }
+                sb.Append("</ul>");
+
+                var message = sb.ToString();
+                await _mailer.SendEmail("PoliVagas - Alerta de novas vagas", notification.Email, message);
             }
 
             notification.LastRunTime = DateTime.UtcNow;

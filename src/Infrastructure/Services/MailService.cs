@@ -26,7 +26,7 @@ public class MailService : IMailService
         using var smtp = new SmtpClient(_settings.Host, _settings.Port);
         smtp.EnableSsl = true;
         smtp.UseDefaultCredentials = false;
-        smtp.Credentials = new NetworkCredential(_settings.Mail, _settings.Password);
+        smtp.Credentials = new NetworkCredential(_settings.Username, _settings.Password);
         smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
         await smtp.SendMailAsync(message);
         smtp.Dispose();
@@ -37,6 +37,7 @@ public class EmailSettings
 {
     public string Mail { get; set; } = default!;
     public string DisplayName { get; set; } = default!;
+    public string Username { get; set; } = default!;
     public string Password { get; set; } = default!;
     public string Host { get; set; } = default!;
     public int Port { get; set; } = default!;

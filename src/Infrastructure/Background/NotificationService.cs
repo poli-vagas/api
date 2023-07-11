@@ -4,7 +4,7 @@ namespace PoliVagas.Core.Infrastructure.Background;
 
 class NotificationService : BackgroundService
 {
-    private readonly TimeSpan _period = TimeSpan.FromDays(1);
+    private readonly TimeSpan _period = TimeSpan.FromMinutes(1);
     private readonly ILogger<NotificationService> _logger;
     private readonly IServiceScopeFactory _factory;
     public bool IsEnabled { get; set; } = true;
@@ -19,7 +19,7 @@ class NotificationService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        using PeriodicTimer timer = new PeriodicTimer(_period);
+        using var timer = new PeriodicTimer(_period);
         while (
             !stoppingToken.IsCancellationRequested &&
             await timer.WaitForNextTickAsync(stoppingToken)
