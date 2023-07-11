@@ -52,6 +52,7 @@ public class SqlJobRepository : IJobRepository
     public async Task<IEnumerable<Job>> Find(Query query)
     {
         return await Filter(query.Filter)
+            .OrderByDescending(j => j.CreatedTime)
             .Skip(query.Page * query.PageSize)
             .Take(query.PageSize)
             .ToListAsync();
